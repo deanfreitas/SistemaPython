@@ -1,6 +1,16 @@
 from flask import Flask
+from flask import request
 
+from .app.service.mongo_service import MongoService
+
+mongoService = MongoService()
 app = Flask(__name__)
+
+
+@app.route('/vault/<id>', methods=['Get'])
+async def get_one(id):
+    if request.method == 'Get':
+        return await mongoService.get_one(id)
 
 
 @app.route('/')
