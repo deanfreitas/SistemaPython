@@ -1,16 +1,21 @@
+from flask_api import status
 from flask import Flask
 from flask import request
 
-from .app.service.mongo_service import MongoService
+from app.service.mongo_service import MongoService
 
 mongoService = MongoService()
 app = Flask(__name__)
 
 
 @app.route('/vault/<id>', methods=['GET'])
-async def get_one(id):
+def get_one(id):
     if request.method == 'GET':
-        return await mongoService.get_one(id)
+        object = mongoService.get_one(id)
+        if object is None:
+            return status.HTTP_404_NOT_FOUND
+        else:
+            return object
 
 
 @app.route('/')

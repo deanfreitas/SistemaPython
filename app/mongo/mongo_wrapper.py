@@ -7,6 +7,6 @@ class MongoWrapper(object):
     db = 'vault'
     url = 'mongodb://' + host + ':' + port + '/' + db
 
-    async def connect(self):
-        client = await MongoClient(self.url)
+    def connect(self):
+        client = MongoClient(self.url)
         return client.get_database()
