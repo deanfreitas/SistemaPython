@@ -3,7 +3,7 @@ from ..mongo.mongo_wrapper import MongoWrapper
 mongoWrapper = MongoWrapper()
 
 
-class MongoService:
+class MongoService(object):
     name_collection = 'vault'
 
     async def get_one(self, id):

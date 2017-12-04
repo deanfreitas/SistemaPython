@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 
 
-class MongoWrapper:
+class MongoWrapper(object):
     host = 'localhost'
     port = '27017'
     db = 'vault'
