@@ -7,9 +7,9 @@ mongoService = MongoService()
 app = Flask(__name__)
 
 
-@app.route('/vault/<id>', methods=['Get'])
+@app.route('/vault/<id>', methods=['GET'])
 async def get_one(id):
-    if request.method == 'Get':
+    if request.method == 'GET':
         return await mongoService.get_one(id)
 
 
