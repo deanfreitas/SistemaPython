@@ -1,11 +1,11 @@
-import json
 import logging
 
-from bson import json_util
-
 from ..mongo.mongo_wrapper import MongoWrapper
+from ..utils.json_utils import JsonUtils
+from ..utils.object_utils import ObjectUtils
 
 log = logging.getLogger(__name__)
+
 mongo_wrapper = MongoWrapper()
 
 
@@ -15,5 +15,5 @@ class MongoService(object):
     def get_one(self, id):
         db = MongoWrapper.connect(mongo_wrapper)
         result = db[self.name_collection].find_one({'id': id})
-        del result['_id']
-        return json.dumps(result, default=json_util.default)
+        ObjectUtils.delete_attribute_object(result, '_id')
+        return JsonUtils.object_to_json(result)
