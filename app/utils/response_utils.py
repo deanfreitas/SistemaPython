@@ -1,7 +1,10 @@
 from flask import Response
 
+from .json_utils import JsonUtils
+
 
 class ResponseUtils(object):
     @staticmethod
     def response(object_return, status):
-        return Response(object_return, status, mimetype='application/json')
+        result = JsonUtils.object_to_json(object_return)
+        return Response(result, status, mimetype='application/json')
