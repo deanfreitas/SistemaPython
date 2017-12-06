@@ -35,10 +35,11 @@ def insert_one():
             return ResponseUtils.response({}, status.HTTP_400_BAD_REQUEST)
         else:
             try:
-                obj['id'] = IdUtils.create_id()
+                id_vault = IdUtils.create_id()
+                obj['id'] = id_vault
                 result = mongo_service.insert_one(obj)
                 if result.inserted_id:
-                    return ResponseUtils.response({}, status.HTTP_201_CREATED)
+                    return ResponseUtils.response({'id': id_vault}, status.HTTP_201_CREATED)
                 else:
                     return ResponseUtils.response({'message': 'Error create register'},
                                                   status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -46,6 +47,23 @@ def insert_one():
                 return ResponseUtils.response(err.details, status.HTTP_409_CONFLICT)
             except Exception as err:
                 return ResponseUtils.response(err.args, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@app.route('/keys', methods=['PUT'])
+def update_one():
+    if request.method == 'PUT':
+        obj = request.json
+        try:
+            if not obj or obj is {} or not obj['id']:
+                return ResponseUtils.response({}, status.HTTP_400_BAD_REQUEST)
+            else:
+                result = mongo_service.update_one(obj)
+                print(result)
+                return 'Test'
+        except KeyError as err:
+            return ResponseUtils.response('missed ' + err.args[0], status.HTTP_400_BAD_REQUEST)
+        except Exception as err:
+            return ResponseUtils.response(err.args, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @app.route('/')

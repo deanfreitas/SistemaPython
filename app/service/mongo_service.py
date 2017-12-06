@@ -14,6 +14,11 @@ class MongoService(object):
         db = MongoWrapper.connect(mongo_wrapper)
         return db[self.name_collection].find_one({'id': id})
 
-    def insert_one(self, json):
+    def insert_one(self, key):
         db = MongoWrapper.connect(mongo_wrapper)
-        return db[self.name_collection].insert_one(json)
+        return db[self.name_collection].insert_one(key)
+
+    def update_one(self, new_key):
+        db = MongoWrapper.connect(mongo_wrapper)
+        return db[self.name_collection].find_one_and_update({'id': new_key['id']},
+                                                            {'$inc': new_key, '$set': {'id': new_key['id']}})
