@@ -8,28 +8,28 @@ mongo_wrapper = MongoWrapper()
 
 
 class MongoService(object):
-    name_collection = 'keys'
-    db = None
+    __name_collection = 'keys'
+    __db = None
 
-    def __db(self):
-        if self.db:
-            return self.db
+    def __get_db(self):
+        if self.__db:
+            return self.__db
 
-        self.db = MongoWrapper.connect(mongo_wrapper)
-        return self.db
+        self.__db = MongoWrapper.connect(mongo_wrapper)
+        return self.__db
 
     def get_one(self, id):
-        db = self.__db()
-        return db[self.name_collection].find_one({'id': id})
+        db = self.__get_db()
+        return db[self.__name_collection].find_one({'id': id})
 
     def insert_one(self, key):
-        db = self.__db()
-        return db[self.name_collection].insert_one(key)
+        db = self.__get_db()
+        return db[self.__name_collection].insert_one(key)
 
     def update_one(self, new_key):
-        db = self.__db()
-        return db[self.name_collection].update_one({'id': new_key['id']}, {'$set': new_key})
+        db = self.__get_db()
+        return db[self.__name_collection].update_one({'id': new_key['id']}, {'$set': new_key})
 
     def delete_one(self, id):
-        db = self.__db()
-        return db[self.name_collection].delete_one({'id': id})
+        db = self.__get_db()
+        return db[self.__name_collection].delete_one({'id': id})
