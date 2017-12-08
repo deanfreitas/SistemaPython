@@ -100,6 +100,7 @@ def delete_one():
         except Exception as err:
             return ResponseUtils.response(err.args, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
 @app.route('/')
 def hello_world():
     return 'Hello World!'
