@@ -41,7 +41,7 @@ def insert_one():
             if result.inserted_id:
                 return ResponseUtils.response({'id': id_vault}, status.HTTP_201_CREATED)
 
-            return ResponseUtils.response({'message': 'Error create register'},
+            return ResponseUtils.response({'message': 'Error create key'},
                                           status.HTTP_500_INTERNAL_SERVER_ERROR)
         except DuplicateKeyError as err:
             return ResponseUtils.response(err.details, status.HTTP_409_CONFLICT)
@@ -74,6 +74,31 @@ def update_one():
         except Exception as err:
             return ResponseUtils.response(err.args, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
+@app.route('/keys', methods=['DELETE'])
+def delete_one():
+    if request.method == 'DELETE':
+        obj = request.json
+        try:
+            if not obj or obj is {} or not obj['id']:
+                return ResponseUtils.response({}, status.HTTP_400_BAD_REQUEST)
+
+            key = mongo_service.get_one(obj['id'])
+            if not key:
+                return ResponseUtils.response({}, status.HTTP_404_NOT_FOUND)
+
+            result = mongo_service.delete_one(obj['id'])
+            if result.raw_result['n'] == 0:
+                return ResponseUtils.response({}, status.HTTP_404_NOT_FOUND)
+
+            if result.deleted_count == 0:
+                return ResponseUtils.response({'message': 'Error delete key'}, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            return ResponseUtils.response({}, status.HTTP_200_OK)
+        except KeyError as err:
+            return ResponseUtils.response('missed ' + err.args[0], status.HTTP_400_BAD_REQUEST)
+        except Exception as err:
+            return ResponseUtils.response(err.args, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @app.route('/')
 def hello_world():
